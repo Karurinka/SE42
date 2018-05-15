@@ -15,13 +15,12 @@ public class RegistrationMgr
 {
 
     private UserDAO userDAO;
-    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("auctionPU");
-    private EntityManager em;
 
-//    public RegistrationMgr()
-//    {
-//        userDAO = new UserDAOJPAImpl(em);
-//    }
+
+    public RegistrationMgr()
+    {
+        userDAO = new UserDAOJPAImpl();
+    }
 
     /**
      * Registreert een gebruiker met het als parameter gegeven e-mailadres, mits
@@ -34,33 +33,19 @@ public class RegistrationMgr
      */
     public User registerUser(String email)
     {
-        em = emf.createEntityManager();
-        userDAO = new UserDAOJPAImpl(em);
-        User user = new User(email);
-        em.getTransaction().begin();
-        try
+
+        if (!email.contains("@"))
         {
-            userDAO.create(user);
-            em.getTransaction().commit();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-            em.getTransaction().rollback();
-        } finally
-        {
-            em.close();
+            return null;
         }
+        User user = userDAO.findByEmail(email);
+        if (user != null)
+        {
+            return user;
+        }
+        user = new User(email);
+        userDAO.create(user);
         return user;
-//        if (!email.contains("@")) {
-//            return null;
-//        }
-//        User user = userDAO.findByEmail(email);
-//        if (user != null) {
-//            return user;
-//        }
-//        user = new User(email);
-//        userDAO.create(user);
-//        return user;
     }
 
     /**
@@ -70,25 +55,7 @@ public class RegistrationMgr
      */
     public User getUser(String email)
     {
-//        return userDAO.findByEmail(email);
-        em = emf.createEntityManager();
-        userDAO = new UserDAOJPAImpl(em);
-        User user = null;
-        em.getTransaction().begin();
-        try
-        {
-            user = userDAO.findByEmail(email);
-            em.getTransaction().commit();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-            em.getTransaction().rollback();
-        }
-        finally
-        {
-            em.close();
-        }
-        return user;
+        return userDAO.findByEmail(email);
     }
 
     /**
@@ -96,24 +63,6 @@ public class RegistrationMgr
      */
     public List<User> getUsers()
     {
-//        return userDAO.findAll();
-        em = emf.createEntityManager();
-        userDAO = new UserDAOJPAImpl(em);
-        List<User> users = new ArrayList<>();
-        em.getTransaction().begin();
-        try
-        {
-            users = userDAO.findAll();
-            em.getTransaction().commit();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-            em.getTransaction().rollback();
-        }
-        finally
-        {
-            em.close();
-        }
-        return users;
+        return userDAO.findAll();
     }
 }

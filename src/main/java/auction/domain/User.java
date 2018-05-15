@@ -2,6 +2,7 @@ package auction.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity (name = "AuctionUser")
 @NamedQueries(
@@ -13,9 +14,6 @@ import java.io.Serializable;
 public class User implements Serializable
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    @Column(unique = true)
     private String email;
 
     public User()
@@ -33,5 +31,18 @@ public class User implements Serializable
         return email;
     }
 
-    public long getId() {return id;}
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(email, user.email);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(email);
+    }
 }
