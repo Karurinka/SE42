@@ -11,7 +11,7 @@ import java.util.Objects;
                 @NamedQuery(name = "User.findByEmail", query = "select u from AuctionUser as u where u.email = :Email")
         }
 )
-public class User implements Serializable
+public class User
 {
     @Id
     private String email;

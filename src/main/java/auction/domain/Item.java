@@ -2,18 +2,29 @@ package auction.domain;
 
 import nl.fontys.util.Money;
 
+import javax.persistence.*;
+
+@Entity
 public class Item implements Comparable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private User seller;
+    @Embedded
     private Category category;
     private String description;
+    @Embedded
     private Bid highest;
 
     public Item(User seller, Category category, String description) {
         this.seller = seller;
         this.category = category;
         this.description = description;
+    }
+
+    public Item()
+    {
     }
 
     public Long getId() {

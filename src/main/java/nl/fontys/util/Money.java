@@ -1,15 +1,19 @@
 package nl.fontys.util;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 import java.io.*;
 import java.text.*;
 
+@Embeddable
 public class Money implements Serializable, Comparable {
 
 	private static final long serialVersionUID = 1L;
 
 	public static final String EURO = "\u20AC";
 
-	private Money() {
+	public Money() {
 		currency="undefined";
 	}
 	
@@ -50,6 +54,26 @@ public class Money implements Serializable, Comparable {
 
 	public String getCurrency() {
 		return currency;
+	}
+
+	public static long getSerialVersionUID()
+	{
+		return serialVersionUID;
+	}
+
+	public static String getEURO()
+	{
+		return EURO;
+	}
+
+	public void setCurrency(String currency)
+	{
+		this.currency = currency;
+	}
+
+	public void setCents(long cents)
+	{
+		this.cents = cents;
 	}
 
 	/**
@@ -95,6 +119,7 @@ public class Money implements Serializable, Comparable {
 
 	private String currency;
 
+	@Column(name = "CENTS")
 	private long cents;
 
 	public int compareTo(Object o) {

@@ -1,10 +1,15 @@
 package auction.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Category {
 
+    @Column(name = "CATEGORY")
     private String description;
 
-    private Category() {
+    public Category() {
         description = "undefined";
     }
 

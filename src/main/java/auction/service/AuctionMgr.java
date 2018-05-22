@@ -1,5 +1,7 @@
 package auction.service;
 
+import auction.dao.ItemDAO;
+import auction.dao.ItemDAOJPAImpl;
 import nl.fontys.util.Money;
 import auction.domain.Bid;
 import auction.domain.Item;
@@ -7,26 +9,39 @@ import auction.domain.User;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AuctionMgr  {
+public class AuctionMgr
+{
+    private ItemDAO itemDAO;
 
-   /**
-     * @param id
-     * @return het item met deze id; als dit item niet bekend is wordt er null
-     *         geretourneerd
-     */
-    public Item getItem(Long id) {
-        // TODO
-        return null;
+    public AuctionMgr()
+    {
+        itemDAO = new ItemDAOJPAImpl();
     }
 
-  
-   /**
+    /**
+     * @param id
+     * @return het item met deze id; als dit item niet bekend is wordt er null
+     * geretourneerd
+     */
+    public Item getItem(Long id)
+    {
+        return itemDAO.find(id);
+    }
+
+    /**
      * @param description
      * @return een lijst met items met @desciption. Eventueel lege lijst.
      */
-    public List<Item> findItemByDescription(String description) {
-        // TODO
-        return new ArrayList<Item>();
+    public List<Item> findItemByDescription(String description)
+    {
+        List<Item> items = new ArrayList<>();
+
+        for (Item i : itemDAO.findByDescription(description))
+        {
+            items.add(i);
+        }
+
+        return items;
     }
 
     /**
@@ -34,10 +49,10 @@ public class AuctionMgr  {
      * @param buyer
      * @param amount
      * @return het nieuwe bod ter hoogte van amount op item door buyer, tenzij
-     *         amount niet hoger was dan het laatste bod, dan null
+     * amount niet hoger was dan het laatste bod, dan null
      */
-    public Bid newBid(Item item, User buyer, Money amount) {
-        // TODO 
-        return null;
+    public Bid newBid(Item item, User buyer, Money amount)
+    {
+        return item.newBid(buyer, amount);
     }
 }

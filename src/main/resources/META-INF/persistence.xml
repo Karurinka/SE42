@@ -3,6 +3,7 @@
     <persistence-unit name="auctionPU" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <class>auction.domain.User</class>
+        <class>auction.domain.Item</class>
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>
             <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://den1.mssql2.gear.host"/>
