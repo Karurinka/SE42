@@ -1,107 +1,230 @@
 package auction.dao;
 
-import auction.dao.ItemDAO;
 import auction.domain.Item;
 
-import javax.persistence.*;
-import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ItemDAOJPAImpl implements ItemDAO
 {
-    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("auctionPU");
-    private EntityManager em = null;
-    private List<Item> items;
+    private static final Logger LOGGER = Logger.getLogger(ItemDAOJPAImpl.class.getName());
+
+    private static final String ERROR_MESSAGE = "Something went wrong while interacting with the database";
+    private final EntityManagerFactory entityManagerFactory;
 
     public ItemDAOJPAImpl()
     {
-        items = new ArrayList<>();
+        entityManagerFactory = Persistence.createEntityManagerFactory("auctionPU");
     }
 
     @Override
     public int count()
     {
-        em = emf.createEntityManager();
-        Query q = em.createNamedQuery("Item.count", Item.class);
-        return ((Long) q.getSingleResult()).intValue();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+        int returnable = -1;
+
+        try
+        {
+            returnable = count(entityManager);
+            entityManager.getTransaction().commit();
+        }
+        catch (Exception e)
+        {
+            LOGGER.log(Level.SEVERE, ERROR_MESSAGE, e);
+            entityManager.getTransaction().rollback();
+        }
+        finally
+        {
+            entityManager.close();
+        }
+
+        return returnable;
+    }
+
+    private int count(EntityManager entityManager)
+    {
+        Query query = entityManager.createNamedQuery("Item.count", Item.class);
+        return (Integer) query.getSingleResult();
     }
 
     @Override
     public void create(Item item)
     {
-        em = emf.createEntityManager();
-        em.getTransaction().begin();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
 
         try
         {
-
-            em.persist(item);
-            em.getTransaction().commit();
-        } catch (IllegalStateException e)
-        {
-            e.printStackTrace();
-            em.getTransaction().rollback();
+            create(entityManager, item);
+            entityManager.getTransaction().commit();
         }
+        catch (Exception e)
+        {
+            LOGGER.log(Level.SEVERE, ERROR_MESSAGE, e);
+            entityManager.getTransaction().rollback();
+        }
+        finally
+        {
+            entityManager.close();
+        }
+    }
+
+    private void create(EntityManager entityManager, Item item)
+    {
+        entityManager.persist(item);
     }
 
     @Override
     public void edit(Item item)
     {
-        em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.merge(item);
-        em.getTransaction().commit();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+
+        try
+        {
+            edit(entityManager, item);
+            entityManager.getTransaction().commit();
+        }
+        catch (Exception e)
+        {
+            LOGGER.log(Level.SEVERE, ERROR_MESSAGE, e);
+            entityManager.getTransaction().rollback();
+        }
+        finally
+        {
+            entityManager.close();
+        }
+    }
+
+    private void edit(EntityManager entityManager, Item item)
+    {
+        entityManager.merge(item);
     }
 
     @Override
     public Item find(Long id)
     {
-        em = emf.createEntityManager();
-        Query q = em.createNamedQuery("Item.findById", Item.class);
-        q.setParameter("Id", id);
+        Item returnItem = null;
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
         try
         {
-            return (Item) q.getSingleResult();
-        } catch (NoResultException e)
-        {
-            return null;
+            returnItem = find(entityManager, id);
+            entityManager.getTransaction().commit();
         }
+        catch (Exception e)
+        {
+            LOGGER.log(Level.SEVERE, ERROR_MESSAGE, e);
+            entityManager.getTransaction().rollback();
+        }
+        finally
+        {
+            entityManager.close();
+        }
+        return  returnItem;
+
+    }
+
+    private Item find(EntityManager entityManager, Long id)
+    {
+        return entityManager.createNamedQuery("Item.find", Item.class)
+                .setParameter("id", id)
+                .getSingleResult();
     }
 
     @Override
     public List<Item> findAll()
     {
-        em = emf.createEntityManager();
-        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-        cq.select(cq.from(Item.class));
-        return em.createQuery(cq).getResultList();
+        List<Item> returnable = new ArrayList<>();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+
+        try
+        {
+            returnable = findAll(entityManager);
+            entityManager.getTransaction().commit();
+        }
+        catch (Exception e)
+        {
+            LOGGER.log(Level.SEVERE, ERROR_MESSAGE, e);
+            entityManager.getTransaction().rollback();
+        }
+        finally
+        {
+            entityManager.close();
+        }
+
+        return returnable;
+    }
+
+    private List<Item> findAll(EntityManager entityManager)
+    {
+        return entityManager.createNamedQuery("Item.findAll", Item.class).getResultList();
     }
 
     @Override
     public List<Item> findByDescription(String description)
     {
-        em = emf.createEntityManager();
-        Query q = em.createNamedQuery("Item.findByDescription", Item.class);
-        q.setParameter("Description", description);
+        List<Item> returnable = new ArrayList<>();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
 
         try
         {
-            for (int i = 0; i < q.getResultList().size(); i++)
-            {
-                items.add((Item) q.getSingleResult());
-            }
-            return items;
-        } catch (NoResultException e)
-        {
-            return null;
+            returnable = findByDescription(entityManager, description);
+            entityManager.getTransaction().commit();
         }
+        catch (Exception e)
+        {
+            LOGGER.log(Level.SEVERE, ERROR_MESSAGE, e);
+            entityManager.getTransaction().rollback();
+        }
+        finally
+        {
+            entityManager.close();
+        }
+
+        return returnable;
+    }
+
+    private List<Item> findByDescription(EntityManager entityManager, String description)
+    {
+        return entityManager.createNamedQuery("Item.findByDescription", Item.class)
+                .setParameter("description", description)
+                .getResultList();
     }
 
     @Override
     public void remove(Item item)
     {
-        em = emf.createEntityManager();
-        em.remove((em.merge(item)));
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+
+        try
+        {
+            remove(entityManager, item);
+            entityManager.getTransaction().commit();
+        }
+        catch (Exception e)
+        {
+            LOGGER.log(Level.SEVERE, ERROR_MESSAGE, e);
+            entityManager.getTransaction().rollback();
+        }
+        finally
+        {
+            entityManager.close();
+        }
+    }
+
+    private void remove(EntityManager entityManager, Item item)
+    {
+        entityManager.remove(entityManager.merge(item));
     }
 }

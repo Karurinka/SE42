@@ -1,14 +1,15 @@
 package auction.domain;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Objects;
 
-@Entity (name = "AuctionUser")
+@Entity
+@Table(name = "AuctionUser")
 @NamedQueries(
         {
-                @NamedQuery(name = "User.count", query = "select count(u) from AuctionUser as u"),
-                @NamedQuery(name = "User.findByEmail", query = "select u from AuctionUser as u where u.email = :Email")
+                @NamedQuery(name = "User.count", query = "select count(u) from User as u"),
+                @NamedQuery(name = "User.findByEmail", query = "select u from User as u where u.email = :Email"),
+                @NamedQuery(name = "User.getAll", query = "select u from User AS u")
         }
 )
 public class User

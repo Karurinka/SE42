@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import nl.fontys.util.Money;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,23 +12,39 @@ import auction.domain.Bid;
 import auction.domain.Category;
 import auction.domain.Item;
 import auction.domain.User;
+import util.DatabaseCleaner;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 
-public class AuctionMgrTest {
+public class AuctionMgrTest
+{
 
     private AuctionMgr auctionMgr;
     private RegistrationMgr registrationMgr;
     private SellerMgr sellerMgr;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() throws Exception
+    {
         registrationMgr = new RegistrationMgr();
         auctionMgr = new AuctionMgr();
         sellerMgr = new SellerMgr();
     }
 
+    @After
+    public void tearDown() throws Exception
+    {
+        final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("auctionPU");
+        new DatabaseCleaner(entityManagerFactory.createEntityManager()).clean();
+    }
+
     @Test
-    public void getItem() {
+    public void getItem()
+    {
 
         String email = "xx2@nl";
         String omsch = "omsch";
@@ -41,7 +58,8 @@ public class AuctionMgrTest {
     }
 
     @Test
-    public void findItemByDescription() {
+    public void findItemByDescription()
+    {
         String email3 = "xx3@nl";
         String omsch = "omsch";
         String email4 = "xx4@nl";
@@ -62,7 +80,8 @@ public class AuctionMgrTest {
     }
 
     @Test
-    public void newBid() {
+    public void newBid()
+    {
 
         String email = "ss2@nl";
         String emailb = "bb@nl";

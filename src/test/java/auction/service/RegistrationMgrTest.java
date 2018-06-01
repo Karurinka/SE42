@@ -21,16 +21,22 @@ public class RegistrationMgrTest
     private RegistrationMgr registrationMgr;
 
 
-    @Before
-    public void setUp() throws Exception
+    @After
+    public void tearDown()
     {
         final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("auctionPU");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
-        entityManager.createQuery("delete from AuctionUser ").executeUpdate();
+        entityManager.createQuery("delete from Item").executeUpdate();
+        entityManager.createQuery("delete from User").executeUpdate();
         entityManager.getTransaction().commit();
         entityManager.close();
 
+    }
+
+    @Before
+    public void setUp()
+    {
         registrationMgr = new RegistrationMgr();
     }
 

@@ -6,19 +6,20 @@ import nl.fontys.util.Money;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
+import javax.persistence.ManyToOne;
 
 @Embeddable
 public class Bid {
 
-    @Embedded
     private FontysTime time;
+    @ManyToOne
     private User buyer;
-    @Embedded
-    @Column(name = "Money")
     private Money amount;
 
     public Bid(User buyer, Money amount) {
-        //TODO
+        this.buyer = buyer;
+        this.amount = amount;
+        time = FontysTime.now();
     }
 
     public Bid()
