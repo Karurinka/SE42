@@ -22,6 +22,9 @@ public class User
 
     }
 
+    /**
+     * @param email
+     */
     public User(String email)
     {
         this.email = email;
