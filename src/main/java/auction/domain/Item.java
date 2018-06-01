@@ -18,7 +18,7 @@ public class Item implements Comparable<Item> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
     private User seller;
     @Embedded
 //    @AttributeOverrides(@AttributeOverride(name = "description", column = @Column(name = "columnDescription")))
@@ -72,10 +72,18 @@ public class Item implements Comparable<Item> {
     @Override
     public boolean equals(Object o)
     {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
         Item item = (Item) o;
-        return Objects.equals(id, item.id) && Objects.equals(seller, item.seller) && Objects.equals(category, item.category) && Objects.equals(description, item.description) && Objects.equals(highest, item.highest);
+        return Objects.equals(id, item.id) && Objects.equals(seller, item.seller) &&
+               Objects.equals(category, item.category) && Objects.equals(description, item.description) &&
+               Objects.equals(highest, item.highest);
     }
 
     @Override
