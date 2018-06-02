@@ -2,12 +2,15 @@ package auction.service;
 
 import auction.dao.ItemDAO;
 import auction.dao.ItemDAOJPAImpl;
+import auction.dao.UserDAO;
+import auction.dao.UserDAOJPAImpl;
 import auction.domain.Category;
 import auction.domain.Item;
 import auction.domain.User;
 public class SellerMgr
 {
     private ItemDAO itemDAO = new ItemDAOJPAImpl();
+    private UserDAO userDAO = new UserDAOJPAImpl();
 
     /**
      * @param seller
@@ -22,6 +25,9 @@ public class SellerMgr
         try
         {
             itemDAO.create(item);
+            seller.addItem(item);
+
+            userDAO.edit(seller);
         } catch (IllegalStateException ignored) {}
         return item;
     }

@@ -51,7 +51,7 @@ public class User
         return offeredItems.size();
     }
 
-    private void addItem(Item item)
+    public void addItem(Item item)
     {
         offeredItems.add(item);
     }

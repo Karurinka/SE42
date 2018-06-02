@@ -21,7 +21,6 @@ public class Item implements Comparable<Item> {
     @ManyToOne(cascade = CascadeType.DETACH)
     private User seller;
     @Embedded
-//    @AttributeOverrides(@AttributeOverride(name = "description", column = @Column(name = "columnDescription")))
     private Category category;
     private String description;
     @Embedded
@@ -89,7 +88,6 @@ public class Item implements Comparable<Item> {
     @Override
     public int hashCode()
     {
-
         return Objects.hash(id, seller, category, description, highest);
     }
 }
