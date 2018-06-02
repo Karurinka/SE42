@@ -2,38 +2,49 @@ package auction.service;
 
 import org.junit.After;
 import org.junit.Ignore;
+
 import javax.persistence.*;
+
 import util.DatabaseCleaner;
 import auction.domain.Category;
 import auction.domain.Item;
 import auction.domain.User;
+
+import java.sql.SQLException;
 import java.util.Iterator;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
-public class ItemsFromSellerTest {
-
-    final EntityManagerFactory emf = Persistence.createEntityManagerFactory("auctionPU");
-    final EntityManager em = emf.createEntityManager();
-    private AuctionMgr auctionMgr;
+public class ItemsFromSellerTest
+{
+    final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("auctionPU");
     private RegistrationMgr registrationMgr;
     private SellerMgr sellerMgr;
 
-    public ItemsFromSellerTest() {
+    public ItemsFromSellerTest()
+    {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp()
+    {
         registrationMgr = new RegistrationMgr();
-        auctionMgr = new AuctionMgr();
         sellerMgr = new SellerMgr();
-        new DatabaseCleaner(em).clean();
+    }
+
+    @After
+    public void tearDown() throws Exception
+    {
+        new DatabaseCleaner(entityManagerFactory.createEntityManager()).clean();
     }
 
     @Test
- //   @Ignore
-    public void numberOfOfferedItems() {
+    //   @Ignore
+    public void numberOfOfferedItems()
+    {
 
         String email = "ifu1@nl";
         String omsch1 = "omsch_ifu1";
@@ -45,19 +56,19 @@ public class ItemsFromSellerTest {
         Category cat = new Category("cat2");
         Item item1 = sellerMgr.offerItem(user1, cat, omsch1);
 
-       
+
         // test number of items belonging to user1
         //assertEquals(0, user1.numberOfOfferedItems());
         assertEquals(1, user1.numberOfOfferedItems());
 
-        
+
         /*
          *  expected: which one of te above two assertions do you expect to be true?
          *  QUESTION:
          *    Explain the result in terms of entity manager and persistance context.
          */
-         
-         
+
+
         assertEquals(1, item1.getSeller().numberOfOfferedItems());
 
 
@@ -77,8 +88,8 @@ public class ItemsFromSellerTest {
          *  QUESTION:
          *    Explain the result in terms of entity manager and persistance context.
          */
-        
-        
+
+
         assertNotSame(user3, userWithItem);
         assertEquals(user3, userWithItem);
 
@@ -86,7 +97,8 @@ public class ItemsFromSellerTest {
 
     @Test
 //    @Ignore
-    public void getItemsFromSeller() {
+    public void getItemsFromSeller()
+    {
         String email = "ifu1@nl";
         String omsch1 = "omsch_ifu1";
         String omsch2 = "omsch_ifu2";
@@ -98,7 +110,7 @@ public class ItemsFromSellerTest {
         Iterator<Item> it = user10.getOfferedItems();
         // testing number of items of java object
         assertTrue(it.hasNext());
-        
+
         // now testing number of items for same user fetched from db.
         User user11 = registrationMgr.getUser(email);
         Iterator<Item> it11 = user11.getOfferedItems();
@@ -108,8 +120,7 @@ public class ItemsFromSellerTest {
 
         // Explain difference in above two tests for te iterator of 'same' user
 
-        
-        
+
         User user20 = registrationMgr.getUser(email);
         Item item20 = sellerMgr.offerItem(user20, cat, omsch2);
         Iterator<Item> it20 = user20.getOfferedItems();

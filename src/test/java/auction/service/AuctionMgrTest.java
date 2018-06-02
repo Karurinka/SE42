@@ -22,13 +22,13 @@ import java.util.ArrayList;
 
 public class AuctionMgrTest
 {
-
+    final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("auctionPU");
     private AuctionMgr auctionMgr;
     private RegistrationMgr registrationMgr;
     private SellerMgr sellerMgr;
 
     @Before
-    public void setUp() throws Exception
+    public void setUp()
     {
         registrationMgr = new RegistrationMgr();
         auctionMgr = new AuctionMgr();
@@ -38,7 +38,6 @@ public class AuctionMgrTest
     @After
     public void tearDown() throws Exception
     {
-        final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("auctionPU");
         new DatabaseCleaner(entityManagerFactory.createEntityManager()).clean();
     }
 

@@ -1,5 +1,6 @@
 package auction.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -10,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import auction.domain.User;
+import util.DatabaseCleaner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -18,20 +20,14 @@ import javax.persistence.Persistence;
 public class RegistrationMgrTest
 {
 
+    final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("auctionPU");
     private RegistrationMgr registrationMgr;
 
 
     @After
-    public void tearDown()
+    public void tearDown() throws Exception
     {
-        final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("auctionPU");
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        entityManager.getTransaction().begin();
-        entityManager.createQuery("delete from Item").executeUpdate();
-        entityManager.createQuery("delete from User").executeUpdate();
-        entityManager.getTransaction().commit();
-        entityManager.close();
-
+        new DatabaseCleaner(entityManagerFactory.createEntityManager()).clean();
     }
 
     @Before
