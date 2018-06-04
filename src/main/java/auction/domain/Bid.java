@@ -3,18 +3,23 @@ package auction.domain;
 import nl.fontys.util.FontysTime;
 import nl.fontys.util.Money;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
-@Embeddable
+@Entity
 public class Bid {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long Id;
 
     private FontysTime time;
     @ManyToOne
     private User buyer;
     private Money amount;
+
+    @OneToOne
+    @JoinColumn(nullable = false)
+    private Item item;
 
     public Bid(User buyer, Money amount) {
         this.buyer = buyer;
@@ -24,6 +29,16 @@ public class Bid {
 
     public Bid()
     {
+    }
+
+    public Item getItem()
+    {
+        return item;
+    }
+
+    public void setItem(Item item)
+    {
+        this.item = item;
     }
 
     public FontysTime getTime() {

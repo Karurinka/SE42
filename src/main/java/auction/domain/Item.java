@@ -18,12 +18,13 @@ public class Item implements Comparable<Item> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(cascade = CascadeType.DETACH)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     private User seller;
     @Embedded
     private Category category;
     private String description;
-    @Embedded
+
+    @OneToOne(mappedBy= "item", cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     private Bid highest;
 
     public Item(User seller, Category category, String description) {
