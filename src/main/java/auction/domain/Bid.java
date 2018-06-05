@@ -77,4 +77,10 @@ public class Bid {
 
         return Objects.hash(time, buyer, amount);
     }
+
+    @Override
+    public String toString()
+    {
+        return "Bid{" + "time=" + time + ", buyer=" + buyer + ", amount=" + amount + '}';
+    }
 }
