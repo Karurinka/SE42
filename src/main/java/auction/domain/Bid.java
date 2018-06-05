@@ -67,14 +67,14 @@ public class Bid {
             return false;
         }
         Bid bid = (Bid) o;
-        return Id == bid.Id && Objects.equals(time, bid.time) && Objects.equals(buyer, bid.buyer) &&
-               Objects.equals(amount, bid.amount) && Objects.equals(item, bid.item);
+        return Objects.equals(time, bid.time) && Objects.equals(buyer, bid.buyer) &&
+               Objects.equals(amount, bid.amount);
     }
 
     @Override
     public int hashCode()
     {
 
-        return Objects.hash(Id, time, buyer, amount);
+        return Objects.hash(time, buyer, amount);
     }
 }
