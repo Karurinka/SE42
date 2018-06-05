@@ -4,6 +4,7 @@ import nl.fontys.util.FontysTime;
 import nl.fontys.util.Money;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class Bid {
@@ -51,5 +52,28 @@ public class Bid {
 
     public Money getAmount() {
         return amount;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (!(o instanceof Bid))
+        {
+            return false;
+        }
+        Bid bid = (Bid) o;
+        return Id == bid.Id && Objects.equals(time, bid.time) && Objects.equals(buyer, bid.buyer) &&
+               Objects.equals(amount, bid.amount) && Objects.equals(item, bid.item);
+    }
+
+    @Override
+    public int hashCode()
+    {
+
+        return Objects.hash(Id, time, buyer, amount, item);
     }
 }

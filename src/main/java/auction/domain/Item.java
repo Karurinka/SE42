@@ -91,4 +91,11 @@ public class Item implements Comparable<Item> {
     {
         return Objects.hash(id, seller, category, description, highest);
     }
+
+    @Override
+    public String toString()
+    {
+        return "Item{" + "id=" + id + ", seller=" + seller + ", category=" + category + ", description='" +
+               description + '\'' + ", highest=" + highest + '}';
+    }
 }
