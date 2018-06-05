@@ -2,6 +2,7 @@ package nl.fontys.util;
 
 import javax.persistence.Embeddable;
 import java.sql.Time;
+import java.util.Objects;
 import java.util.TimeZone;
 
 @Embeddable
@@ -54,5 +55,27 @@ public class FontysTime {
 
 		TimeZone.setDefault(current);
 		return timeString;
+	}
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if (this == o)
+		{
+			return true;
+		}
+		if (o == null || getClass() != o.getClass())
+		{
+			return false;
+		}
+		FontysTime that = (FontysTime) o;
+		return seconds == that.seconds;
+	}
+
+	@Override
+	public int hashCode()
+	{
+
+		return Objects.hash(seconds);
 	}
 }

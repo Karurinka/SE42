@@ -24,7 +24,7 @@ public class Item implements Comparable<Item> {
     private Category category;
     private String description;
 
-    @OneToOne(mappedBy= "item", cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    @OneToOne(mappedBy= "item", cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE, CascadeType.PERSIST})
     private Bid highest;
 
     public Item(User seller, Category category, String description) {
@@ -61,7 +61,7 @@ public class Item implements Comparable<Item> {
         if (highest != null && highest.getAmount().compareTo(amount) >= 0) {
             return null;
         }
-        highest = new Bid(buyer, amount);
+        highest = new Bid(buyer, amount, this);
         return highest;
     }
 

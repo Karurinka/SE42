@@ -22,9 +22,10 @@ public class Bid {
     @JoinColumn(nullable = false)
     private Item item;
 
-    public Bid(User buyer, Money amount) {
+    public Bid(User buyer, Money amount, Item item) {
         this.buyer = buyer;
         this.amount = amount;
+        this.item = item;
         time = FontysTime.now();
     }
 
@@ -74,6 +75,6 @@ public class Bid {
     public int hashCode()
     {
 
-        return Objects.hash(Id, time, buyer, amount, item);
+        return Objects.hash(Id, time, buyer, amount);
     }
 }
