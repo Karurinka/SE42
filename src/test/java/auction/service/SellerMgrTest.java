@@ -26,6 +26,8 @@ public class SellerMgrTest {
 
     @Before
     public void setUp() throws Exception {
+        final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("auctionPU");
+        new DatabaseCleaner(entityManagerFactory.createEntityManager()).clean();
         registrationMgr = new RegistrationMgr();
         auctionMgr = new AuctionMgr();
         sellerMgr = new SellerMgr();
@@ -34,8 +36,7 @@ public class SellerMgrTest {
     @After
     public void tearDown() throws Exception
     {
-        final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("auctionPU");
-        new DatabaseCleaner(entityManagerFactory.createEntityManager()).clean();
+
     }
 
     /**

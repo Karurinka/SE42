@@ -24,6 +24,13 @@ public class RegistrationMgrTest
     @After
     public void tearDown()
     {
+
+
+    }
+
+    @Before
+    public void setUp()
+    {
         final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("auctionPU");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
@@ -31,12 +38,6 @@ public class RegistrationMgrTest
         entityManager.createQuery("delete from User").executeUpdate();
         entityManager.getTransaction().commit();
         entityManager.close();
-
-    }
-
-    @Before
-    public void setUp()
-    {
         registrationMgr = new RegistrationMgr();
     }
 
