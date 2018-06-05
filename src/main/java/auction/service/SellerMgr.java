@@ -24,9 +24,6 @@ public class SellerMgr
         try
         {
             itemDAO.create(item);
-            seller.addItem(item);
-
-            userDAO.edit(seller);
         }
         catch (IllegalStateException ignored)
         {
@@ -40,9 +37,6 @@ public class SellerMgr
         try
         {
             itemDAO.create(item);
-            seller.addItem(item);
-
-            userDAO.edit(seller);
         }
         catch (IllegalStateException ignored)
         {
@@ -56,9 +50,6 @@ public class SellerMgr
         try
         {
             itemDAO.create(item);
-            seller.addItem(item);
-
-            userDAO.edit(seller);
         }
         catch (IllegalStateException ignored)
         {
